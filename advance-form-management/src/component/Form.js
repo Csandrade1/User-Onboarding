@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import * as yup from "yup";
+import axios from "axios";
 
 const schema = yup.object().shape({
   first_name: yup.string().required("first name is required"),
@@ -43,6 +44,31 @@ export default function Form() {
     setForm({ ...form, [name]: valueToUse });
   };
 
+  const submit = (event) => {
+    event.preventDefault();
+    const newPerson = {
+      first_name: form.first_name.trim(),
+      last_name: form.last_name.trim(),
+      email: form.email.trim(),
+      password: form.password.trim(),
+      agree: form.agree,
+    };
+    axios
+      .post("https://reqres.in/api/users", newPerson)
+      .then((res) => {
+        setForm({
+          first_name: "",
+          last_name: "",
+          email: "",
+          password: "",
+          agree: false,
+        });
+      })
+      .catch((err) => {
+        debugger;
+      });
+  };
+
   useEffect(() => {
     schema.isValid(form).then((valid) => setDisabled(!valid));
   }, [form]);
@@ -56,7 +82,7 @@ export default function Form() {
         <div>{errors.password}</div>
         <div>{errors.agree}</div>
       </div>
-      <form>
+      <form onSubmit={submit}>
         <label>
           First Name
           <input
