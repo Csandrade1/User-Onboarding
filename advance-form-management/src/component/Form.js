@@ -133,7 +133,7 @@ export default function Form() {
           />
         </label>
 
-        <button disabled={disabled} className="sumbit">
+        <button disabled={disabled} name="submit">
           Submit
         </button>
       </form>
